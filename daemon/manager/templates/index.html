@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>RamaLama Daemon</title>
+
+  <script>
+
+    function start_model(worker, model){
+        fetch(`/api/worker/${worker}/models/serve`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: model,
+              inference_options: {
+                engine: "llama.cpp",
+              },
+              serve_options: {
+                expires_after: "5",
+              },
+            })
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not OK");
+            return response.json();
+        })
+        .then(data => {
+            alert(`Model ${model} can be accessed by\n${window.location.host}${data["chat_path"]}`);
+        })
+        .catch(error => {
+            alert("Failed starting: ", error);
+        });
+    }
+
+  </script>
+</head>
+<body>
+<h1>RamaLama Daemon</h1>
+Available worker:
+<ul>
+{%- for worker_name, value in data.items() -%}
+<li> {{ worker_name }} </li>
+  <ul>
+  {%- for model in value.models -%}
+    <li> {{ model }} <button class="btn-model-start" data-worker="{{ worker_name }}" data-model="{{ model }}">Start</button></li>
+  {%- endfor -%}
+  </ul>
+{%- endfor -%}
+</ul>
+
+<script>
+  document.querySelectorAll(".btn-model-start").forEach(btn => {
+      btn.addEventListener("click", function() {
+        start_model(btn.dataset.worker, btn.dataset.model)
+      });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,424 @@
+{
+  "paths": {
+    "/api/models": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AvailableModelDTO"
+                  }
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-api"
+        ]
+      }
+    },
+    "/api/models/{id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-api"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "/api/models/serve": {
+      "post": {
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_CONTENT"
+          },
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelServeResponseDTO"
+                }
+              }
+            }
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelServeRequestDTO"
+              }
+            }
+          }
+        },
+        "tags": [
+          "worker-api"
+        ]
+      }
+    },
+    "/api/models/stop": {
+      "post": {
+        "responses": {
+          "422": {
+            "$ref": "#/components/responses/UNPROCESSABLE_CONTENT"
+          },
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModelStopRequestDTO"
+              }
+            }
+          }
+        },
+        "tags": [
+          "worker-api"
+        ]
+      }
+    },
+    "/proxy/": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-proxy"
+        ]
+      }
+    },
+    "/proxy/{model}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-proxy"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "model",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "/proxy/{model}/{path}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-proxy"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "model",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        {
+          "in": "path",
+          "name": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/proxy/{model}/chat": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-proxy"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "model",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ]
+    },
+    "/proxy/{model}/v1/chat/completions": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "default": {
+            "$ref": "#/components/responses/DEFAULT_ERROR"
+          }
+        },
+        "tags": [
+          "worker-proxy"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "model",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      ]
+    }
+  },
+  "info": {
+    "title": "Ramalama-Worker REST API",
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "worker-api",
+      "description": ""
+    },
+    {
+      "name": "worker-proxy",
+      "description": ""
+    }
+  ],
+  "openapi": "3.0.3",
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "description": "Error code"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error name"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "errors": {
+            "type": "object",
+            "description": "Errors",
+            "additionalProperties": {}
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaginationMetadata": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "integer"
+          },
+          "total_pages": {
+            "type": "integer"
+          },
+          "first_page": {
+            "type": "integer"
+          },
+          "last_page": {
+            "type": "integer"
+          },
+          "page": {
+            "type": "integer"
+          },
+          "previous_page": {
+            "type": "integer"
+          },
+          "next_page": {
+            "type": "integer"
+          }
+        },
+        "additionalProperties": false
+      },
+      "AvailableModelDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer"
+          },
+          "modified": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "modified",
+          "name",
+          "size"
+        ],
+        "additionalProperties": false
+      },
+      "InferenceOptionsDTO": {
+        "type": "object",
+        "properties": {
+          "engine": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "engine"
+        ],
+        "additionalProperties": false
+      },
+      "ServeOptionsDTO": {
+        "type": "object",
+        "properties": {
+          "expires_after": {
+            "type": "integer"
+          }
+        },
+        "required": [
+          "expires_after"
+        ],
+        "additionalProperties": false
+      },
+      "ModelServeRequestDTO": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string"
+          },
+          "inference_options": {
+            "$ref": "#/components/schemas/InferenceOptionsDTO"
+          },
+          "serve_options": {
+            "$ref": "#/components/schemas/ServeOptionsDTO"
+          }
+        },
+        "required": [
+          "inference_options",
+          "model",
+          "serve_options"
+        ],
+        "additionalProperties": false
+      },
+      "ModelServeResponseDTO": {
+        "type": "object",
+        "properties": {
+          "model_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "model_id"
+        ],
+        "additionalProperties": false
+      },
+      "ModelStopRequestDTO": {
+        "type": "object",
+        "properties": {
+          "model": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "model"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "responses": {
+      "DEFAULT_ERROR": {
+        "description": "Default error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "UNPROCESSABLE_CONTENT": {
+        "description": "Unprocessable Content",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,154 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ramalama"
+dynamic = ["version"]
+description = "RamaLama Daemon is a model router for AI LLM models."
+readme = "README.md"
+requires-python = ">=3.10"
+keywords = [
+  "ramalama",
+  "llama",
+  "ai",
+  "llm",
+  "large-language-model",
+  "inference",
+  "containers",
+  "podman",
+  "docker",
+  "gpu",
+  "rag",
+  "model router",
+]
+dependencies = [
+  "flask>=3.1.2",
+  "requests>=2.32.5",
+]
+maintainers = [
+   { name="Michael Engel", email = "mengel@redhat.com" },
+]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: System Administrators",
+  "Operating System :: MacOS :: MacOS X",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Topic :: Utilities",
+]
+
+[project.license]
+text = "MIT"
+
+[project.optional-dependencies]
+dev = [
+    # "pytest>=7.0",
+    "argcomplete~=3.0",
+    "bcrypt",
+    "black~=25.0",
+    "codespell~=2.0",
+    "flake8~=7.0",
+    "huggingface_hub~=1.2.1",
+    "hypothesis>=6.135.26",
+    "isort~=7.0",
+    "pytest~=9.0",
+    "wheel~=0.45.0",
+    "mypy",
+    "types-PyYAML",
+    "types-jsonschema",
+    "tox",
+]
+
+[project.urls]
+Homepage = "https://github.com/containers/ramalama"
+Repository = "https://github.com/containers/ramalama"
+Issues = "https://github.com/containers/ramalama/issues"
+Discussions = "https://github.com/containers/ramalama/discussions"
+Discord = "https://discord.gg/MkCXuTRBUn"
+Matrix = "https://matrix.to/#/#ramalama:fedoraproject.org"
+
+[project.scripts]
+ramalama = "daemon.server:main"
+
+[tool.setuptools]
+include-package-data = true
+license-files = ["LICENSE"]
+
+[tool.setuptools.package-data]
+"ramalama" = ["py.typed"]
+
+[tool.setuptools.dynamic]
+version = {attr = "daemon.version.version"}
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+target-version = ["py310", "py311", "py312", "py313"]
+extend-exclude = "(.history|build|dist|docs|hack)"
+
+[tool.isort]
+profile = "black"
+line_length = 120
+skip = [".venv", "venv", ".tox"]
+
+[tool.codespell]
+skip = ["build", "ramalama.egg-info", "logos", ".git", "venv", ".venv", ".tox", ".pixi"]
+dictionary = ".codespelldict"
+ignore-words-list = [
+  "assertin",
+  "cann",
+  "clos",
+  "creat",
+  "hastable",
+  "passt",
+  "ro",
+  "shouldnot",
+]
+check-hidden = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+include = ["\\.pyi?$"]
+exclude = [
+  "/\\.git",
+  "/\\.tox",
+  "/\\.venv",
+  "/\\.history",
+  "/build",
+  "/dist",
+  "/docs",
+  "/hack",
+  "/venv",
+  "/.pixi"
+]
+
+[tool.ruff.format]
+preview = true
+quote-style = "preserve"
+
+[tool.coverage]
+html.directory = "coverage/html"
+xml.output = "coverage/coverage.xml"
+json.output = "coverage/coverage.json"
+lcov.output = "coverage/coverage.lcov"
+
+[tool.pytest.ini_options]
+testpaths = ["test"]
+markers = ["e2e", "distro_integration"]
+addopts = "-m 'not e2e' --color=yes"
+
+[tool.setuptools.packages.find]
+include = ["daemon", "daemon.*"]

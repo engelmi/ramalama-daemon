@@ -1,0 +1,5 @@
+openapitools.json
+openapi/daemon/client/
+openapi/worker/client/
+
+__pycache__/
