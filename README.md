@@ -10,6 +10,19 @@ This is roughly depicted in the following diagram:
 
 ![overview](./assets/ramalama-daemon.drawio.png)
 
+## Running the proposal
+
+1. Start the daemon:
+```bash
+$ PYTHONPATH=. ./daemon/server.py --port 8070
+```
+
+2. Start the (local) worker:
+```bash
+$ PYTHONPATH=. ./worker/server.py --daemon-port 8070
+```
+
+3. Open the webbrowser at `http://localhost:8070/`. You should see a list of the registered, local worker and all available models. By clicking on a `Start`-button, the model can be run. 
 
 ## Generating OpenAPI clients
 
